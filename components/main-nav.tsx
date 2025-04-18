@@ -26,11 +26,11 @@ export function MainNav() {
             />
             <div className="h-6 w-px bg-gray-300 dark:bg-gray-700"></div>
             <Image
-              src="/images/cms-logo.png"
+              src="/images/cms-logo-new.jpeg"
               alt="Career Management Services"
-              width={60}
-              height={20}
-              className="h-6 w-auto dark:invert"
+              width={70}
+              height={25}
+              className="h-6 w-auto"
             />
           </Link>
         </div>

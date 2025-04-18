@@ -92,11 +92,11 @@ export default function LoginPage() {
             <CardHeader className="flex flex-col items-center pb-2 pt-6">
               <div className="bg-white dark:bg-gray-800 rounded-full p-4 mb-4">
                 <Image
-                  src="/images/cms-logo.png"
+                  src="/images/cms-logo-new.jpeg"
                   alt="Career Management Services"
-                  width={180}
-                  height={60}
-                  className="h-auto dark:invert"
+                  width={220}
+                  height={80}
+                  className="h-auto"
                 />
               </div>
               <h1 className="text-2xl font-bold text-blue-900 dark:text-blue-400">Career Portal Login</h1>
@@ -168,7 +168,7 @@ export default function LoginPage() {
 
             <CardFooter className="flex flex-col space-y-2 border-t pt-4">
               <div className="text-xs text-center w-full text-gray-500">
-                Need help? Contact the IT Help Desk at <span className="font-medium">helpdesk@slu.edu</span>
+                Need help? Contact the IT Help Desk at <span className="font-medium">helpdesk@cms.edu</span>
               </div>
             </CardFooter>
           </Card>
