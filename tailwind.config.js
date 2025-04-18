@@ -51,6 +51,20 @@ module.exports = {
           DEFAULT: "hsl(var(--card))",
           foreground: "hsl(var(--card-foreground))",
         },
+        // SLU blue color
+        "slu-blue": {
+          DEFAULT: "#0033A0",
+          50: "#E5EEFF",
+          100: "#B3C6FF",
+          200: "#809EFF",
+          300: "#4D76FF",
+          400: "#1A4EFF",
+          500: "#0033A0", // SLU primary blue
+          600: "#002A87",
+          700: "#00216E",
+          800: "#001755",
+          900: "#000E3C",
+        },
       },
       borderRadius: {
         lg: "var(--radius)",

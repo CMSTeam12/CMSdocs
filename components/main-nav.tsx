@@ -1,6 +1,7 @@
 "use client"
 
 import Link from "next/link"
+import Image from "next/image"
 import { usePathname } from "next/navigation"
 import { Button } from "@/components/ui/button"
 import { ModeToggle } from "@/components/mode-toggle"
@@ -15,8 +16,22 @@ export function MainNav() {
     <div className="border-b">
       <div className="flex h-16 items-center px-4">
         <div className="flex items-center space-x-4 lg:space-x-6 mr-4">
-          <Link href="/" className="font-bold text-xl">
-            Career Portal
+          <Link href="/" className="flex items-center space-x-2">
+            <Image
+              src="/images/slu-logo.png"
+              alt="Saint Louis University"
+              width={120}
+              height={30}
+              className="h-8 w-auto"
+            />
+            <div className="h-6 w-px bg-gray-300 dark:bg-gray-700"></div>
+            <Image
+              src="/images/cms-logo.png"
+              alt="Career Management Services"
+              width={60}
+              height={20}
+              className="h-6 w-auto dark:invert"
+            />
           </Link>
         </div>
         <div className="flex items-center space-x-1">
