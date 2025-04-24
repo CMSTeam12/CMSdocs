@@ -18,6 +18,9 @@ import { JobMatchChart } from "@/components/charts/job-match-chart"
 import { CertificationMatchChart } from "@/components/charts/certification-match-chart"
 import { SkillsRadarChart } from "@/components/charts/skills-radar-chart"
 
+// Add the ChatBot import at the top of the file
+import { ChatBot } from "@/components/chat-bot"
+
 export default function StudentDashboard() {
   const [students, setStudents] = useState<Student[]>([])
   const [loading, setLoading] = useState(true)
@@ -473,6 +476,7 @@ export default function StudentDashboard() {
           </Tabs>
         </div>
       </div>
+      {selectedStudent && <ChatBot student={selectedStudent} />}
     </ProtectedRoute>
   )
 }

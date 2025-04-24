@@ -1,6 +1,6 @@
 "use client"
 
-import { AreaChart, Area, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from "recharts"
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from "recharts"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import type { Student } from "@/lib/data"
 import { ChartWrapper } from "./chart-wrapper"
@@ -10,38 +10,31 @@ interface SalaryDistributionChartProps {
 }
 
 export function SalaryDistributionChart({ students }: SalaryDistributionChartProps) {
-  // Create salary distribution data
-  const createSalaryDistribution = () => {
-    const validSalaries = students
-      .map((s) => s.expectedSalary)
-      .filter((salary) => salary > 0)
-      .sort((a, b) => a - b)
+  // Create salary ranges
+  const salaryRanges = [
+    { range: "< $50k", min: 0, max: 50000, count: 0 },
+    { range: "$50k-$75k", min: 50000, max: 75000, count: 0 },
+    { range: "$75k-$100k", min: 75000, max: 100000, count: 0 },
+    { range: "$100k-$125k", min: 100000, max: 125000, count: 0 },
+    { range: "$125k-$150k", min: 125000, max: 150000, count: 0 },
+    { range: "> $150k", min: 150000, max: Number.POSITIVE_INFINITY, count: 0 },
+  ]
 
-    if (validSalaries.length === 0) return []
-
-    const min = Math.floor(validSalaries[0] / 10000) * 10000
-    const max = Math.ceil(validSalaries[validSalaries.length - 1] / 10000) * 10000
-    const step = 10000
-
-    const ranges: Record<string, number> = {}
-
-    for (let i = min; i < max; i += step) {
-      ranges[`${i}-${i + step}`] = 0
+  // Count students in each salary range
+  students.forEach((student) => {
+    const salary = student.expectedSalary
+    const range = salaryRanges.find((r) => salary >= r.min && salary < r.max)
+    if (range) {
+      range.count++
     }
+  })
 
-    validSalaries.forEach((salary) => {
-      const rangeStart = Math.floor(salary / step) * step
-      const rangeKey = `${rangeStart}-${rangeStart + step}`
-      ranges[rangeKey] = (ranges[rangeKey] || 0) + 1
-    })
-
-    return Object.entries(ranges).map(([name, count]) => ({
-      range: name,
-      count,
-    }))
-  }
-
-  const data = createSalaryDistribution()
+  // Prepare data for the chart
+  const chartData = salaryRanges.map((range) => ({
+    name: range.range,
+    count: range.count,
+    percentage: Math.round((range.count / students.length) * 100),
+  }))
 
   return (
     <Card>
@@ -52,21 +45,24 @@ export function SalaryDistributionChart({ students }: SalaryDistributionChartPro
         <div className="h-[300px]">
           <ChartWrapper>
             <ResponsiveContainer width="100%" height="100%">
-              <AreaChart
-                data={data}
+              <BarChart
+                data={chartData}
                 margin={{
-                  top: 10,
+                  top: 5,
                   right: 30,
-                  left: 0,
-                  bottom: 0,
+                  left: 20,
+                  bottom: 5,
                 }}
               >
                 <CartesianGrid strokeDasharray="3 3" />
-                <XAxis dataKey="range" />
+                <XAxis dataKey="name" />
                 <YAxis />
-                <Tooltip formatter={(value) => [value, "Students"]} />
-                <Area type="monotone" dataKey="count" stroke="#8884d8" fill="#8884d8" />
-              </AreaChart>
+                <Tooltip
+                  formatter={(value, name, props) => [`${value} (${props.payload.percentage}%)`, "Number of Students"]}
+                />
+                <Legend />
+                <Bar dataKey="count" name="Students" fill="#82ca9d" />
+              </BarChart>
             </ResponsiveContainer>
           </ChartWrapper>
         </div>
