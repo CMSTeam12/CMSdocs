@@ -78,33 +78,25 @@ export default function LoginPage() {
           {/* SLU Logo */}
           <div className="flex justify-center mb-6">
             <Image
-              src="/images/slu-logo.png"
+              src="/images/slu-logo-new.png"
               alt="Saint Louis University"
               width={400}
               height={100}
               priority
-              className="h-auto"
-              onError={(e) => {
-                e.currentTarget.src =
-                  "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/git-blob/iFuD8rYAsxs/public/images/slu-logo-geLqoUZx55ctuE94bikFlkrDIkJjCx.png"
-              }}
+              className="h-auto max-w-full"
             />
           </div>
 
           <Card className="border-2 shadow-lg">
             {/* CMS Logo */}
             <CardHeader className="flex flex-col items-center pb-2 pt-6">
-              <div className="bg-white dark:bg-gray-800 rounded-full p-4 mb-4">
+              <div className="bg-white dark:bg-gray-800 rounded-lg p-4 mb-4">
                 <Image
                   src="/images/cms-logo-new.jpeg"
                   alt="Career Management Services"
                   width={220}
                   height={80}
                   className="h-auto"
-                  onError={(e) => {
-                    e.currentTarget.src =
-                      "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/git-blob/iFuD8rYAsxs/public/images/cms-logo-new-x8ZiEfhg6dWkFhUDIpOz0k9kz2V8Ge.jpeg"
-                  }}
                 />
               </div>
               <h1 className="text-2xl font-bold text-blue-900 dark:text-blue-400">Career Portal Login</h1>

@@ -30,17 +30,29 @@ export default function StudentDashboard() {
   useEffect(() => {
     async function loadData() {
       const data = await fetchStudentData()
-      setStudents(data)
+
+      // Sort students alphabetically by first name and then last name
+      const sortedData = [...data].sort((a, b) => {
+        // First compare by first name
+        const firstNameComparison = a.firstName.localeCompare(b.firstName)
+        if (firstNameComparison !== 0) {
+          return firstNameComparison
+        }
+        // If first names are the same, compare by last name
+        return a.lastName.localeCompare(b.lastName)
+      })
+
+      setStudents(sortedData)
 
       // If user is a student, find their data
       if (user?.role === "student" && user?.studentId) {
-        const studentData = data.find((s) => s.id === user.studentId)
+        const studentData = sortedData.find((s) => s.id === user.studentId)
         if (studentData) {
           setSelectedStudent(studentData)
         }
-      } else if (user?.role === "staff" && data.length > 0) {
-        // If staff, default to first student
-        setSelectedStudent(data[0])
+      } else if (user?.role === "staff" && sortedData.length > 0) {
+        // If staff, default to first student (which will now be alphabetically first)
+        setSelectedStudent(sortedData[0])
       }
 
       setLoading(false)

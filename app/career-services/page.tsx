@@ -30,8 +30,20 @@ export default function CareerServicesDashboard() {
   useEffect(() => {
     async function loadData() {
       const data = await fetchStudentData()
-      setStudents(data)
-      setFilteredStudents(data)
+
+      // Sort students alphabetically by first name and then last name
+      const sortedData = [...data].sort((a, b) => {
+        // First compare by first name
+        const firstNameComparison = a.firstName.localeCompare(b.firstName)
+        if (firstNameComparison !== 0) {
+          return firstNameComparison
+        }
+        // If first names are the same, compare by last name
+        return a.lastName.localeCompare(b.lastName)
+      })
+
+      setStudents(sortedData)
+      setFilteredStudents(sortedData)
       setLoading(false)
     }
 
@@ -85,8 +97,12 @@ export default function CareerServicesDashboard() {
   }
 
   // Get unique majors and job levels for filters
-  const majors = Array.from(new Set(students.map((s) => s.major))).filter(Boolean)
-  const jobLevels = Array.from(new Set(students.map((s) => s.jobLevel))).filter(Boolean)
+  const majors = Array.from(new Set(students.map((s) => s.major)))
+    .filter(Boolean)
+    .sort()
+  const jobLevels = Array.from(new Set(students.map((s) => s.jobLevel)))
+    .filter(Boolean)
+    .sort()
 
   // Calculate skills distribution
   const skillsCount = getSkillsCount(students)
