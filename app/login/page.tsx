@@ -84,6 +84,10 @@ export default function LoginPage() {
               height={100}
               priority
               className="h-auto"
+              onError={(e) => {
+                e.currentTarget.src =
+                  "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/git-blob/iFuD8rYAsxs/public/images/slu-logo-geLqoUZx55ctuE94bikFlkrDIkJjCx.png"
+              }}
             />
           </div>
 
@@ -97,6 +101,10 @@ export default function LoginPage() {
                   width={220}
                   height={80}
                   className="h-auto"
+                  onError={(e) => {
+                    e.currentTarget.src =
+                      "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/git-blob/iFuD8rYAsxs/public/images/cms-logo-new-x8ZiEfhg6dWkFhUDIpOz0k9kz2V8Ge.jpeg"
+                  }}
                 />
               </div>
               <h1 className="text-2xl font-bold text-blue-900 dark:text-blue-400">Career Portal Login</h1>

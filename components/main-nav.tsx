@@ -23,6 +23,10 @@ export function MainNav() {
               width={120}
               height={30}
               className="h-8 w-auto"
+              onError={(e) => {
+                e.currentTarget.src =
+                  "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/git-blob/iFuD8rYAsxs/public/images/slu-logo-geLqoUZx55ctuE94bikFlkrDIkJjCx.png"
+              }}
             />
             <div className="h-6 w-px bg-gray-300 dark:bg-gray-700"></div>
             <Image
@@ -31,6 +35,10 @@ export function MainNav() {
               width={70}
               height={25}
               className="h-6 w-auto"
+              onError={(e) => {
+                e.currentTarget.src =
+                  "https://hebbkx1anhila5yf.public.blob.vercel-storage.com/git-blob/iFuD8rYAsxs/public/images/cms-logo-new-x8ZiEfhg6dWkFhUDIpOz0k9kz2V8Ge.jpeg"
+              }}
             />
           </Link>
         </div>

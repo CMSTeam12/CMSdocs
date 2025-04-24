@@ -97,12 +97,12 @@ export function ChatBot({ student }: ChatBotProps) {
   }
 
   return (
-    <div className="fixed bottom-4 right-4 z-50">
+    <div className="fixed bottom-4 right-4 z-50 max-h-[calc(100vh-2rem)]">
       {isOpen ? (
         <Card
           className={cn(
-            "w-80 md:w-96 shadow-lg transition-all duration-300 ease-in-out",
-            isMinimized ? "h-16" : "h-[500px]",
+            "w-80 md:w-96 shadow-lg transition-all duration-300 ease-in-out flex flex-col",
+            isMinimized ? "h-16" : "max-h-[500px] h-[calc(100vh-6rem)]",
           )}
         >
           <CardHeader className="p-3 border-b flex flex-row items-center justify-between">
@@ -122,7 +122,7 @@ export function ChatBot({ student }: ChatBotProps) {
 
           {!isMinimized && (
             <>
-              <ScrollArea className="flex-1 p-4 h-[360px]">
+              <ScrollArea className="flex-1 p-4 overflow-y-auto">
                 <div className="space-y-4">
                   {messages.map((message) => (
                     <div
@@ -197,7 +197,6 @@ export function ChatBot({ student }: ChatBotProps) {
   )
 }
 
-// Function to generate responses based on user input
 function generateResponse(input: string, student: Student): string {
   // Get job and certification suggestions
   const jobSuggestions = getJobSuggestions(student)
@@ -212,9 +211,17 @@ function generateResponse(input: string, student: Student): string {
     .filter(([_, hasSkill]) => !hasSkill)
     .map(([skill]) => skill.replace(/_/g, " "))
 
+  // Normalize input for better matching
+  const normalizedInput = input.toLowerCase().trim()
+
   // Check for job-related queries
-  if (input.includes("job") || input.includes("career") || input.includes("work")) {
-    if (input.includes("top") || input.includes("best") || input.includes("match")) {
+  if (
+    normalizedInput.includes("job") ||
+    normalizedInput.includes("career") ||
+    normalizedInput.includes("work") ||
+    normalizedInput.includes("match")
+  ) {
+    if (normalizedInput.includes("top") || normalizedInput.includes("best") || normalizedInput.includes("3")) {
       const topJobs = jobSuggestions.slice(0, 3)
       return `Based on your skills, here are your top 3 job matches:
 1. ${topJobs[0].title} (${Math.round(topJobs[0].matchScore * 100)}% match) - ${topJobs[0].laborCode}
@@ -236,7 +243,11 @@ These align well with your current skills in ${Object.entries(student.skillsMap)
   }
 
   // Check for certification-related queries
-  if (input.includes("cert") || input.includes("qualification") || input.includes("credential")) {
+  if (
+    normalizedInput.includes("cert") ||
+    normalizedInput.includes("qualification") ||
+    normalizedInput.includes("credential")
+  ) {
     return `Based on your skills profile, these certifications would be valuable:
 1. ${certSuggestions[0].name} (${Math.round(certSuggestions[0].matchScore * 100)}% match)
 2. ${certSuggestions[1].name} (${Math.round(certSuggestions[1].matchScore * 100)}% match)
@@ -245,13 +256,17 @@ These certifications would help strengthen your expertise and make you more comp
   }
 
   // Check for skills-related queries
-  if (input.includes("skill") || input.includes("improve") || input.includes("learn")) {
+  if (normalizedInput.includes("skill") || normalizedInput.includes("improve") || normalizedInput.includes("learn")) {
+    // Make sure we have at least 3 missing skills to recommend
+    const skillsToRecommend = missingSkills.slice(0, 3)
+    while (skillsToRecommend.length < 3 && skillsToRecommend.length < missingSkills.length) {
+      skillsToRecommend.push(missingSkills[skillsToRecommend.length])
+    }
+
     return `You currently have ${skillCount} out of ${totalSkills} skills in your profile (${Math.round((skillCount / totalSkills) * 100)}%).
 
 To improve your job prospects, consider developing these skills:
-1. ${missingSkills[0]}
-2. ${missingSkills[1]}
-3. ${missingSkills[2]}
+${skillsToRecommend.map((skill, index) => `${index + 1}. ${skill}`).join("\n")}
 
 These skills are in high demand and would complement your existing expertise.`
   }
