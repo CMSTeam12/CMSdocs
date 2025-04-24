@@ -12,7 +12,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Input } from "@/components/ui/input"
 import { ProtectedRoute } from "@/components/protected-route"
-import { Search } from "lucide-react"
+import { MapPin, Search } from "lucide-react"
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/components/ui/tooltip"
 
 // Add imports for the charts at the top of the file
 import { SkillsDistributionChart } from "@/components/charts/skills-distribution-chart"
@@ -325,6 +326,7 @@ export default function CareerServicesDashboard() {
                         <TableHead>Major</TableHead>
                         <TableHead>Job Level</TableHead>
                         <TableHead>Experience</TableHead>
+                        <TableHead>Location</TableHead>
                         <TableHead>Status</TableHead>
                         <TableHead>Skills</TableHead>
                       </TableRow>
@@ -338,6 +340,37 @@ export default function CareerServicesDashboard() {
                           <TableCell>{student.major}</TableCell>
                           <TableCell>{student.jobLevel}</TableCell>
                           <TableCell>{student.yearsOfExperience} years</TableCell>
+                          <TableCell>
+                            <TooltipProvider>
+                              <Tooltip>
+                                <TooltipTrigger asChild>
+                                  <div className="flex items-center">
+                                    <MapPin className="h-3.5 w-3.5 mr-1 text-muted-foreground" />
+                                    <span>{student.preferredLocation1 || "Not specified"}</span>
+                                    {(student.preferredLocation2 || student.preferredLocation3) && (
+                                      <Badge variant="outline" className="ml-1 text-xs">
+                                        +
+                                        {
+                                          [student.preferredLocation2, student.preferredLocation3].filter(Boolean)
+                                            .length
+                                        }
+                                      </Badge>
+                                    )}
+                                  </div>
+                                </TooltipTrigger>
+                                {(student.preferredLocation2 || student.preferredLocation3) && (
+                                  <TooltipContent>
+                                    <p className="font-medium">Preferred Locations:</p>
+                                    <ol className="list-decimal pl-4 mt-1">
+                                      {student.preferredLocation1 && <li>{student.preferredLocation1}</li>}
+                                      {student.preferredLocation2 && <li>{student.preferredLocation2}</li>}
+                                      {student.preferredLocation3 && <li>{student.preferredLocation3}</li>}
+                                    </ol>
+                                  </TooltipContent>
+                                )}
+                              </Tooltip>
+                            </TooltipProvider>
+                          </TableCell>
                           <TableCell>{student.jobSearchStatus}</TableCell>
                           <TableCell>
                             <div className="flex flex-wrap gap-1">
