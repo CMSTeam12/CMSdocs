@@ -12,6 +12,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
 import { Input } from "@/components/ui/input"
 import { ProtectedRoute } from "@/components/protected-route"
+import { Search } from "lucide-react"
 
 // Add imports for the charts at the top of the file
 import { SkillsDistributionChart } from "@/components/charts/skills-distribution-chart"
@@ -55,12 +56,36 @@ export default function CareerServicesDashboard() {
 
     // Apply search filter
     if (searchTerm) {
-      result = result.filter(
-        (student) =>
-          student.firstName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          student.lastName.toLowerCase().includes(searchTerm.toLowerCase()) ||
-          student.email.toLowerCase().includes(searchTerm.toLowerCase()),
-      )
+      const searchTermLower = searchTerm.toLowerCase()
+      result = result.filter((student) => {
+        // Search by name or email
+        if (
+          student.firstName.toLowerCase().includes(searchTermLower) ||
+          student.lastName.toLowerCase().includes(searchTermLower) ||
+          student.email.toLowerCase().includes(searchTermLower)
+        ) {
+          return true
+        }
+
+        // Search by skills
+        const hasMatchingSkill = Object.entries(student.skillsMap).some(
+          ([skill, hasSkill]) => hasSkill && skill.toLowerCase().replace(/_/g, " ").includes(searchTermLower),
+        )
+        if (hasMatchingSkill) {
+          return true
+        }
+
+        // Search by location preferences
+        if (
+          (student.preferredLocation1 && student.preferredLocation1.toLowerCase().includes(searchTermLower)) ||
+          (student.preferredLocation2 && student.preferredLocation2.toLowerCase().includes(searchTermLower)) ||
+          (student.preferredLocation3 && student.preferredLocation3.toLowerCase().includes(searchTermLower))
+        ) {
+          return true
+        }
+
+        return false
+      })
     }
 
     // Apply major filter
@@ -210,16 +235,19 @@ export default function CareerServicesDashboard() {
             <Card className="col-span-2">
               <CardHeader>
                 <CardTitle>Student Filters</CardTitle>
-                <CardDescription>Filter students by name, major, and job level</CardDescription>
+                <CardDescription>
+                  Filter students by name, email, skills, location, major, and job level
+                </CardDescription>
               </CardHeader>
               <CardContent>
                 <div className="flex flex-col space-y-4 md:flex-row md:space-x-4 md:space-y-0">
-                  <div className="flex-1">
+                  <div className="flex-1 relative">
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 h-4 w-4 text-muted-foreground" />
                     <Input
-                      placeholder="Search by name or email"
+                      placeholder="Search by name, email, skills or location"
                       value={searchTerm}
                       onChange={(e) => setSearchTerm(e.target.value)}
-                      className="w-full"
+                      className="w-full pl-9"
                     />
                   </div>
                   <div>
